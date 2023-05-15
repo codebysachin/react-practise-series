@@ -26,12 +26,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-<<<<<<< HEAD
   ]
-=======
-  ],
-  "devDependencies": {
-    "react-icons": "^4.8.0"
-  }
->>>>>>> 2fb3620351947d7925a91ed8ea4f8e2cfec8df9b
 }
