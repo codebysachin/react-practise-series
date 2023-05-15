@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-import React from "react";
-import ItemList from "./ItemList";
-
-const Content = ({items, handleCheck, handleDelete}) => {
-  return (
-    <main>
-      {items.length ? (
-        <ItemList items={items} handleCheck={handleCheck} handleDelete={handleDelete} />
-=======
 import React, { useState } from "react";
 import { FaTrashAlt } from 'react-icons/fa';
 
@@ -60,7 +50,6 @@ const Content = () => {
         ))}
       
       </ul>
->>>>>>> 2fb3620351947d7925a91ed8ea4f8e2cfec8df9b
       ) : <p>Your List is empty</p> }
     </main>
   );
