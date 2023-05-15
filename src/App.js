@@ -5,43 +5,40 @@ import Footer from "./Footer";
 import Header from "./Header";
 
 export default function App() {
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      checked: false,
-      item: "One half pound bag of Cocoa Covered Almonds Unsalted"
-    },
-    {
-      id: 2,
-      checked: false,
-      item: "Item 2"
-    },
-    {
-      id: 3,
-      checked: false,
-      item: "Item 3"
-    }
-  ]);
-
+  const [items, setItems] = useState(JSON.parse(localStorage.getItem('Shopping List')));
   const [newItem, setNewItem] = useState('');
+
+  const setAndSaveItems = (newItems) => {
+    setItems(newItems);
+    localStorage.setItem('Shopping List', JSON.stringify(newItems));
+  };
+
+  const addItem = (item) => {
+    const id = items.length ? items[items.length - 1].id + 1 : 1;
+    const myNewItem = { id: id, checked: false, item: item };
+    const listItems = [...items, myNewItem];
+    console.log(items.length);
+    console.log(items[items.length - 1].id);
+    console.log(items[items.length - 1].id + 1);
+    setAndSaveItems(listItems);
+  };
 
   const handleCheck = (id) => {
     const listItems = items.map((item) => item.id === id ?
       { ...item, checked: !item.checked } : item);
-    setItems(listItems);
-    localStorage.setItem('Shopping List', JSON.stringify(listItems));
+      setAndSaveItems(listItems);
   }
 
   const handleDelete = (id) => {
     const listItems = items.filter((item) => item.id !== id);
-    setItems(listItems);
-    localStorage.setItem('Shopping List', JSON.stringify(listItems));
+    setAndSaveItems(listItems);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(!newItem) return;
-    // addItem
+    if (!newItem) return;
+    console.log(newItem);
+    addItem(newItem);
     setNewItem('');
   };
 
