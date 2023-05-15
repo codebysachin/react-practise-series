@@ -44,11 +44,7 @@ main {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-<<<<<<< HEAD
   justify-content: flex-start;
-=======
-  justify-content: center;
->>>>>>> 2fb3620351947d7925a91ed8ea4f8e2cfec8df9b
   align-items: center;
   overflow-y: auto;
 }
