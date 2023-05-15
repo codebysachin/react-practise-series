@@ -6,11 +6,12 @@ import Header from "./Header";
 import SearchItem from "./SearchItem";
 
 export default function App() {
-  const API_URL = "http://localhost:3502/itemss";
+  const API_URL = "http://localhost:3500/items";
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState("");
   const [search, setSearch] = useState("");
-  const [fetchError, setFetchError] = useEffect(null);
+  const [fetchError, setFetchError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -23,9 +24,15 @@ export default function App() {
         setFetchError(null);
       } catch (err) {
         setFetchError(err.message);
+      } finally {
+        setIsLoading(false);
       }
     };
-    fetchItems();
+    setTimeout(() => {
+      (async () => await fetchItems())();
+    }, 2000);
+    (async () => await fetchItems());
+    // fetchItems(); you can call fetchItems without async as is not returning anything 
   }, []);
 
   const addItem = (item) => {
@@ -67,13 +74,17 @@ export default function App() {
         setNewItem={setNewItem}
         handleSubmit={handleSubmit}
       />
-      <Content
-        items={items.filter((item) =>
-          item.item.toLowerCase().includes(search.toLowerCase())
-        )}
-        handleCheck={handleCheck}
-        handleDelete={handleDelete}
-      />
+      <main>
+        {isLoading && <p>Loading Items...</p>}
+        {fetchError && <p style={{ color: "red" }}>{`Error: ${fetchError}`}</p>}
+        {!fetchError && !isLoading && <Content
+          items={items.filter((item) =>
+            item.item.toLowerCase().includes(search.toLowerCase())
+          )}
+          handleCheck={handleCheck}
+          handleDelete={handleDelete}
+        />}
+      </main>
       <Footer length={items.length} />
     </div>
   );
