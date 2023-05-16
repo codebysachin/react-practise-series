@@ -4,9 +4,10 @@ import Content from "./Content";
 import Footer from "./Footer";
 import Header from "./Header";
 import SearchItem from "./SearchItem";
+import apiRequest from "./apiRequest";
 
 export default function App() {
-  const API_URL = "http://localhost:3500/items";
+  const API_URL = "http://localhost:3501/items";
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState("");
   const [search, setSearch] = useState("");
@@ -16,6 +17,7 @@ export default function App() {
   useEffect(() => {
     const fetchItems = async () => {
       try {
+        console.log('call made');
         const response = await fetch(API_URL);
         if (!response.ok) throw Error("Did not receive expected data");
         const listItems = await response.json();
@@ -35,26 +37,53 @@ export default function App() {
     // fetchItems(); you can call fetchItems without async as is not returning anything 
   }, []);
 
-  const addItem = (item) => {
+  const addItem = async (item) => {
     const id = items.length ? items[items.length - 1].id + 1 : 1;
     const myNewItem = { id: id, checked: false, item: item };
     const listItems = [...items, myNewItem];
-    console.log(items.length);
-    console.log(items[items.length - 1].id);
-    console.log(items[items.length - 1].id + 1);
     setItems(listItems);
+
+    const postOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(myNewItem)
+    };
+
+    const result = await apiRequest(API_URL, postOptions);
+    if (result) setFetchError(result);
   };
 
-  const handleCheck = (id) => {
+  const handleCheck = async (id) => {
     const listItems = items.map((item) =>
       item.id === id ? { ...item, checked: !item.checked } : item
     );
     setItems(listItems);
+
+    const myItem = listItems.filter((item) => item.id === id);
+    const updateOptions = {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({checked: myItem[0].checked})
+    };
+    const reqUrl = `${API_URL}/${id}`;
+    const result = await apiRequest(reqUrl, updateOptions);
+    if(result) setFetchError(result);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     const listItems = items.filter((item) => item.id !== id);
     setItems(listItems);
+
+    const deleteOptions = {
+      method: 'DELETE'
+    };
+    const reqUrl = `${API_URL}/${id}`;
+    const result = await apiRequest(reqUrl, deleteOptions);
+    if(result) setFetchError(result);
   };
 
   const handleSubmit = (e) => {
@@ -68,12 +97,12 @@ export default function App() {
   return (
     <div className="App">
       <Header title="Groceries List" />
-      <SearchItem search={search} setSearch={setSearch} />
       <AddItem
         newItem={newItem}
         setNewItem={setNewItem}
         handleSubmit={handleSubmit}
       />
+      <SearchItem search={search} setSearch={setSearch} />
       <main>
         {isLoading && <p>Loading Items...</p>}
         {fetchError && <p style={{ color: "red" }}>{`Error: ${fetchError}`}</p>}
