@@ -1,19 +1,19 @@
 {
-    "items": [
-        {
-            "id": 1,
-            "checked": false,
-            "item": "Almond"
-        },
-        {
-            "id": 2,
-            "checked": false,
-            "item": "Cashew"
-        },
-        {
-            "id": 3,
-            "checked": false,
-            "item": "Raisen"
-        }
-    ]
+  "items": [
+    {
+      "id": 1,
+      "checked": false,
+      "item": "Almond"
+    },
+    {
+      "id": 2,
+      "checked": false,
+      "item": "Cashew"
+    },
+    {
+      "id": 3,
+      "checked": false,
+      "item": "Raisen"
+    }
+  ]
 }
